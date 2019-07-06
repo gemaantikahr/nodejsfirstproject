@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>{{name}}</h2>
+  <div>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+        Add Student
+      </button>
+  </div>        
+  <table class="table table-striped" id="mytable">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Student id</th>
+        <th>Student name</th>
+        <th>Student address</th>
+        <th>Option*</th>
+      </tr>
+    </thead>
+    <tbody>
+      <script>
+        var i = 0;
+      </script>
+      {{#each studentlist}}
+      <script>
+        i++;
+      </script>
+      <tr>
+        <td>
+          <script>
+            document.write(i);
+          </script> 
+        </td>
+        <td>{{student_id}}</td>
+        <td>{{student_name}}</td>
+        <td>{{student_address}}</td>
+        <td> 
+            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{id_mahasiswa}}" data-nim="{{student_id}}" data-name="{{ student_name}}" data-address="{{ student_address}}"> Edit</a>
+            <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{id_mahasiswa}}" data-name="{{ student_name}}"> Delete</a>
+        </td>
+        <td></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div>
+  <!-- The Modal -->
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Add Student</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+            <form action="/savestudent" method="POST">
+              <div class="form-group">
+                <label for="usr">Student Id:</label>
+                <input type="text" class="form-control" id="usr" name="xid">
+              </div>
+              <div class="form-group">
+                <label for="pwd">Student Name:</label>
+                <input type="text" class="form-control" id="pwd" name="xname">
+              </div>
+              <div class="form-group">
+                <label for="pwd">Student Address:</label>
+                <input type="text" class="form-control" id="pwd" name="xaddress">
+              </div>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- modal update student --}}
+<div>
+  <!-- The Modal -->
+  <div class="modal" id="modalupdate">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Update Student</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+            <form action="/updatestudent" method="POST">
+              <div class="form-group">
+                <label for="usr">Student Id:</label>
+                <input type="text" class="form-control nim" id="usr" name="xnim">
+              </div>
+              <div class="form-group">
+                <label for="pwd">Student Name:</label>
+                <input type="text" class="form-control name" id="pwd" name="xname">
+              </div>
+              <div class="form-group">
+                <label for="pwd">Student Address:</label>
+                <input type="text" class="form-control address" id="pwd" name="xaddress">
+              </div>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+              <input type="text" class="form-control id" id="pwd" name="xid" hidden>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- modal Delete student --}}
+<div>
+  <!-- The Modal -->
+  <div class="modal" id="modaldelete">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Delete Student</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+            <form action="/delete" method="POST">
+              <div class="form-group">
+                <input type="text" class="form-control name" id="pwd" name="xname" readonly>
+              </div>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+              <input type="text" class="form-control id" id="pwd" name="xid" hidden>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Delete</button>
+            </form>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function(){
+
+  $('#mytable').on('click','.edit',function(){
+        var id_mahasiswa = $(this).data('id');
+        var student_id = $(this).data('nim');
+        var student_name = $(this).data('name');
+        var student_address = $(this).data('address');
+        $('#modalupdate').modal('show');
+        $('.nim').val(student_id);
+        $('.id').val(id_mahasiswa);
+        $('.name').val(student_name);
+        $('.address').val(student_address);
+  });
+
+    $('#mytable').on('click','.delete',function(){
+        var id_mahasiswa = $(this).data('id');
+        var student_name = $(this).data('name');
+        $('#modaldelete').modal('show');
+        $('.id').val(id_mahasiswa);
+        $('.name').val("Are you sure for deleting "+student_name+" data ?");
+  });
+
+  });
+</script>
+
+</body>
+</html>
