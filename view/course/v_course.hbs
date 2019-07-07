@@ -40,9 +40,9 @@
     <thead>
       <tr>
         <th>No</th>
-        <th>Student id</th>
-        <th>Student name</th>
-        <th>Student address</th>
+        <th>Course name</th>
+        <th>Course credit</th>
+        <th>Course semester</th>
         <th>Option*</th>
       </tr>
     </thead>
@@ -50,7 +50,7 @@
       <script>
         var i = 0;
       </script>
-      {{#each studentlist}}
+      {{#each courselist}}
       <script>
         i++;
       </script>
@@ -60,11 +60,11 @@
             document.write(i);
           </script> 
         </td>
-        <td>{{student_id}}</td>
-        <td>{{student_name}}</td>
-        <td>{{student_address}}</td>
+        <td>{{course_name}}</td>
+        <td>{{course_credit}}</td>
+        <td>{{course_semester}}</td>
         <td> 
-            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{id_mahasiswa}}" data-nim="{{student_id}}" data-name="{{ student_name}}" data-address="{{ student_address}}"> Edit</a>
+            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{course_id}}" data-credit="{{course_credit}}" data-name="{{ course_name}}" data-semester="{{ course_semester}}"> Edit</a>
             <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{id_mahasiswa}}" data-name="{{ student_name}}"> Delete</a>
         </td>
         <td></td>
@@ -124,7 +124,7 @@
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Update Student</h4>
+          <h4 class="modal-title">Update Course</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
@@ -132,16 +132,16 @@
         <div class="modal-body">
             <form action="/updatestudent" method="POST">
               <div class="form-group">
-                <label for="usr">Student Id:</label>
-                <input type="text" class="form-control nim" id="usr" name="xnim">
-              </div>
-              <div class="form-group">
-                <label for="pwd">Student Name:</label>
+                <label for="pwd">Course Name:</label>
                 <input type="text" class="form-control name" id="pwd" name="xname">
               </div>
               <div class="form-group">
-                <label for="pwd">Student Address:</label>
-                <input type="text" class="form-control address" id="pwd" name="xaddress">
+                <label for="pwd">Course credit:</label>
+                <input type="text" class="form-control credit" id="pwd" name="xaddress">
+              </div>
+              <div class="form-group">
+                <label for="usr">Course semester:</label>
+                <input type="text" class="form-control semester" id="usr" name="xnim">
               </div>
         </div>
         
@@ -196,15 +196,15 @@
   $(document).ready(function(){
 
   $('#mytable').on('click','.edit',function(){
-        var id_mahasiswa = $(this).data('id');
-        var student_id = $(this).data('nim');
-        var student_name = $(this).data('name');
-        var student_address = $(this).data('address');
+        var course_id = $(this).data('id');
+        var course_credit = $(this).data('credit');
+        var course_name = $(this).data('name');
+        var course_semester = $(this).data('semester');
         $('#modalupdate').modal('show');
-        $('.nim').val(student_id);
-        $('.id').val(id_mahasiswa);
-        $('.name').val(student_name);
-        $('.address').val(student_address);
+        $('.id').val(course_id);
+        $('.credit').val(course_credit);
+        $('.name').val(course_name);
+        $('.semester').val(course_semester);
   });
 
     $('#mytable').on('click','.delete',function(){

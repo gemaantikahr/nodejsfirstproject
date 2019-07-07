@@ -37,18 +37,24 @@ app.get('/', function(req, res){
 });
 
 app.get('/home', function(req, res){
-    var name = "gema antikahariadi";
-    conn.query("SELECT *FROM tbl_student", (err, studentlist)=>{
-        res.render('student/v_show_student',{
-            studentlist: studentlist,
-            name : name,
+    if(req.session.username){
+        conn.query("SELECT *FROM tbl_student", (err, studentlist)=>{
+            res.render('student/v_show_student',{
+                studentlist: studentlist,
+                name : ssn.user,
+            });
         });
-    });
+    }else{
+        res.redirect('/');
+    }
+    
 });
 
 app.post('/login', function(req, res){
     var username = req.body.xusername;
     var password = md5(req.body.xpassword);
+    ssn = req.session;
+    ssn.user = req.body.xusername;
     if(username && password){
         conn.query('select *from tbl_user where username =? and password = ?', [username, password], function(error, results, fields ){
             if(results.length > 0){
@@ -109,9 +115,32 @@ app.post('/delete', function(req, res){
     conn.query(query, (err, results)=>{
         if(err) throw err;
         res.redirect('/home');
-    })
-})
+    });
+});
 
+app.get('/course', function(req, res){
+    if(req.session.username){
+        query = "SELECT *FROM tbl_course";
+        conn.query(query, (err, courselist)=>{
+            if(err) throw err;
+            res.render('course/v_course',{
+                courselist:courselist
+            });
+        });
+    }else{
+        res.redirect('/');
+    }
+});
+
+app.get('/logout',function(req,res){
+    req.session.destroy(function(err) {
+      if(err) {
+        console.log(err);
+      } else {
+        res.redirect('/');
+      }
+    });
+  });
 
 
 
