@@ -33,7 +33,12 @@ app.set('view engine', 'hbs');
 
 app.get('/', function(req, res){
     // res.sendFile(path.join(__dirname + '/view/v_loginhtml.html'));
-    res.render('login/v_login');
+    if(req.session.username){
+        res.redirect('/home')
+    }else{
+        console.log('nini');
+        res.render('login/v_login');
+    };
 });
 
 app.get('/home', function(req, res){
@@ -119,12 +124,14 @@ app.post('/delete', function(req, res){
 });
 
 app.get('/course', function(req, res){
+    var name = req.session.username; 
     if(req.session.username){
         query = "SELECT *FROM tbl_course";
         conn.query(query, (err, courselist)=>{
             if(err) throw err;
             res.render('course/v_course',{
-                courselist:courselist
+                courselist:courselist,
+                name : name
             });
         });
     }else{
@@ -140,6 +147,23 @@ app.get('/logout',function(req,res){
         res.redirect('/');
       }
     });
+  });
+
+  //relation
+  app.get('/relation', function(req, res){      
+    var name = req.session.username;
+    if(name){
+        query = "SELECT *FROM tbl_student";
+        conn.query(query, (err, studentlist)=>{
+            if(err) throw err;
+            res.render('relation/v_relation', {
+                name : name,
+                studentlist : studentlist
+            });
+        });
+    }else{
+        res.redirect('/');
+    }
   });
 
 
